@@ -1,0 +1,20 @@
+# Netlify deploy config for the web/ React app only. The backend, AI
+# service, and database are NOT deployable to Netlify (it only serves
+# static sites) -- see docs/deployment.md for hosting those.
+[build]
+  base = "web"
+  command = "npm run build"
+  publish = "web/dist"
+
+[build.environment]
+  # Set the real value in Netlify's UI (Site settings -> Environment
+  # variables) once the backend is hosted somewhere -- this placeholder
+  # only prevents the build from referencing an undefined variable.
+  VITE_API_BASE_URL = "http://localhost:8000/api/v1"
+
+# Client-side routing (React Router): let every path fall through to
+# index.html so refreshing e.g. /citizen/report doesn't 404.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

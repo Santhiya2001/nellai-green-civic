@@ -1,0 +1,12 @@
+{
+  "id": "water",
+  "name": "Neervalam (Water Resources)",
+  "version": "1.0.0",
+  "description": "Tracks the Tamirabharani river, lakes, ponds, canals, wells and tanks; lets citizens report pollution, encroachment and blockage, and record environmental observations.",
+  "api_version": "v1",
+  "author": "Community",
+  "permissions": [],
+  "dependencies": [],
+  "categories": ["LAKE_POLLUTION", "RIVER_POLLUTION", "CANAL_BLOCKAGE", "WATER_BODY_ENCROACHMENT", "REDUCED_WATER_LEVEL"],
+  "backend_entry": "backend/router.py"
+}

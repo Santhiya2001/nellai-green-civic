@@ -1,0 +1,11 @@
+{
+  "id": "civic",
+  "name": "Civic Issue Reporting",
+  "version": "1.0.0",
+  "description": "General civic issue reporting: road damage, streetlights, public toilets and other non-environmental municipal issues, built entirely on the core generic complaint engine.",
+  "api_version": "v1",
+  "author": "Community",
+  "permissions": [],
+  "dependencies": [],
+  "categories": ["ROAD_DAMAGE", "STREETLIGHT_PROBLEM", "PUBLIC_TOILET_ISSUE", "OTHER"]
+}

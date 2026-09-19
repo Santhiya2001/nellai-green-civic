@@ -1,0 +1,71 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  validate-modules:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate every module.json
+        run: python3 scripts/validate_modules.py
+
+  backend:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgis/postgis:15-3.4
+        env:
+          POSTGRES_USER: nellai
+          POSTGRES_PASSWORD: nellai_test
+          POSTGRES_DB: nellai_test
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U nellai -d nellai_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgresql+asyncpg://nellai:nellai_test@localhost:5432/nellai_test
+      JWT_SECRET_KEY: ci-test-secret
+      AI_SERVICE_ENABLED: "false"
+      TESTING: "true"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        working-directory: backend
+        run: pip install -r requirements.txt
+      - name: Run Alembic migrations
+        working-directory: backend
+        env:
+          MODULES_ROOT: ${{ github.workspace }}/modules
+        run: alembic upgrade head
+      - name: Lint
+        working-directory: backend
+        run: python -m py_compile $(find app -name "*.py")
+      - name: Run tests
+        working-directory: backend
+        env:
+          MODULES_ROOT: ${{ github.workspace }}/modules
+        run: pytest -q
+
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Install dependencies
+        working-directory: web
+        run: npm install
+      - name: Type-check & build
+        working-directory: web
+        run: npm run build

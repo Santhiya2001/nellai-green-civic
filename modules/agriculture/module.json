@@ -1,0 +1,12 @@
+{
+  "id": "agriculture",
+  "name": "Agriculture",
+  "version": "1.0.0",
+  "description": "Crop disease/pest reporting and farm advisories for the Tirunelveli agricultural belt.",
+  "api_version": "v1",
+  "author": "Community",
+  "permissions": [],
+  "dependencies": [],
+  "categories": ["CROP_DISEASE", "CROP_PEST"],
+  "backend_entry": "backend/router.py"
+}

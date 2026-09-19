@@ -1,0 +1,11 @@
+{
+  "id": "drainage",
+  "name": "Drainage Management",
+  "version": "1.0.0",
+  "description": "Drainage issue reporting and monitoring: blocked drains and water stagnation, built on the core generic complaint engine.",
+  "api_version": "v1",
+  "author": "Community",
+  "permissions": [],
+  "dependencies": [],
+  "categories": ["DRAIN_BLOCKAGE", "WATER_STAGNATION"]
+}

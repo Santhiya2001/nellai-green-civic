@@ -1,0 +1,45 @@
+# Environment
+.env
+*.env.local
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+
+# Node
+node_modules/
+dist/
+build/
+
+# Flutter
+mobile/build/
+mobile/.dart_tool/
+mobile/.flutter-plugins
+mobile/.flutter-plugins-dependencies
+mobile/**/GeneratedPluginRegistrant.*
+mobile/android/local.properties
+mobile/android/key.properties
+mobile/**/*.jks
+mobile/**/*.keystore
+
+# AI model weights -- large binaries, fetched on demand via
+# scripts/download_ai_models.sh rather than committed to git.
+ai/model_assets/
+ai/model_cache/
+
+# Uploaded user content (local dev storage backend)
+backend/uploads/
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+
+# Local Claude Code tool state -- not project source
+.claude/
+
+# Logs
+*.log

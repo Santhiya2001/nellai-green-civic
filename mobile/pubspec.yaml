@@ -1,0 +1,46 @@
+name: nellai_green_civic
+description: "Nellai Green & Civic -- report and track civic & environmental issues in Tirunelveli."
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.13.3
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+
+  # State management -- deliberately minimal (Provider, not a heavier
+  # framework) to match the web app's philosophy of not adding a dependency
+  # where the platform's own primitives do the job.
+  provider: ^6.1.2
+
+  # Networking
+  http: ^1.2.1
+
+  # Persist JWTs securely (Android Keystore / iOS Keychain backed)
+  flutter_secure_storage: ^9.2.2
+
+  # GPS location capture
+  geolocator: ^13.0.1
+
+  # Camera / gallery photo capture for complaint evidence
+  image_picker: ^1.1.2
+
+  # Environmental map -- OpenStreetMap tiles via Leaflet-equivalent, no
+  # Google Maps API key required (matches the web app's map stack).
+  flutter_map: ^7.0.2
+  latlong2: ^0.9.1
+
+  intl: ^0.19.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true

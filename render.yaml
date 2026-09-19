@@ -1,0 +1,61 @@
+# Render.com Blueprint -- deploys the backend, AI service, and a database.
+# The web/ React app is NOT deployed here; deploy it to Netlify (see
+# netlify.toml) or any static host instead.
+#
+# Usage: push this repo to GitHub, then in Render: New -> Blueprint, point
+# it at the repo. Render reads this file and creates the services below.
+#
+# IMPORTANT -- verify before relying on this: this file was written against
+# Render's documented Blueprint spec but has not been tested against a live
+# Render account. Two things to check when you actually deploy:
+#   1. Render's managed Postgres needs the postgis, pg_trgm and uuid-ossp
+#      extensions available. If `CREATE EXTENSION postgis` fails during the
+#      backend's first migration, switch nellai-db to a private Docker
+#      service running postgis/postgis:15-3.4 with a persistent disk
+#      instead of the `databases:` block below (same pattern as db in
+#      docker-compose.yml).
+#   2. AI_SERVICE_URL for nellai-backend is left as a placeholder --
+#      Render assigns nellai-ai an internal address after first deploy;
+#      copy it from the Render dashboard and set it there rather than
+#      trusting a guessed variable-interpolation syntax here.
+#
+# Redis is deliberately not included -- nothing in the backend currently
+# depends on it (see app/core/config.py's REDIS_URL: it's reserved for
+# future rate-limiting/caching use, not load-bearing today).
+
+databases:
+  - name: nellai-db
+    databaseName: nellai_green_civic
+    user: nellai
+    plan: free
+
+services:
+  - type: web
+    name: nellai-backend
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: .
+    plan: free
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: nellai-db
+          property: connectionString
+      - key: JWT_SECRET_KEY
+        generateValue: true
+      - key: AI_SERVICE_URL
+        value: "REPLACE_WITH_NELLAI_AI_INTERNAL_URL"
+      - key: AI_SERVICE_ENABLED
+        value: "true"
+      - key: BACKEND_CORS_ORIGINS
+        value: '["https://REPLACE_WITH_YOUR_NETLIFY_SITE.netlify.app"]'
+      - key: MODULES_ROOT
+        value: /app/modules
+    preDeployCommand: "alembic upgrade head && python -m app.db.seed"
+
+  - type: web
+    name: nellai-ai
+    runtime: docker
+    dockerfilePath: ./ai/Dockerfile
+    dockerContext: ./ai
+    plan: free

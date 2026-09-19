@@ -1,0 +1,96 @@
+version: "3.9"
+
+x-backend-env: &backend-env
+  env_file:
+    - .env
+
+services:
+  db:
+    image: postgis/postgis:15-3.4
+    container_name: nellai-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-nellai}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change_me_dev_password}
+      POSTGRES_DB: ${POSTGRES_DB:-nellai_green_civic}
+    ports:
+      - "5432:5432"
+    volumes:
+      - nellai_db_data:/var/lib/postgresql/data
+      - ./database/init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-nellai} -d ${POSTGRES_DB:-nellai_green_civic}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: nellai-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: nellai-backend
+    restart: unless-stopped
+    <<: *backend-env
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    volumes:
+      - ./backend:/app
+      - ./modules:/app/modules
+      - ./scripts:/app/scripts
+      - nellai_uploads:/app/uploads
+    ports:
+      - "8000:8000"
+    command: >
+      sh -c "alembic upgrade head &&
+             python -m app.db.seed &&
+             python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
+
+  ai-service:
+    build:
+      context: ./ai
+      dockerfile: Dockerfile
+    container_name: nellai-ai
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - ./ai:/app
+      - nellai_ai_models:/app/model_cache
+      - nellai_uploads:/app/uploads:ro
+    ports:
+      - "8100:8100"
+    command: uvicorn main:app --host 0.0.0.0 --port 8100 --reload
+
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+      args:
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:8000/api/v1}
+    container_name: nellai-web
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./web:/app
+      - /app/node_modules
+    environment:
+      VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:8000/api/v1}
+    command: npm run dev -- --host 0.0.0.0 --port 5173
+
+volumes:
+  nellai_db_data:
+  nellai_uploads:
+  nellai_ai_models:

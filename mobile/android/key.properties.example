@@ -1,0 +1,6 @@
+# Copy to android/key.properties (gitignored) and fill in real values after
+# generating your release keystore -- see docs/android-release.md.
+storePassword=changeme
+keyPassword=changeme
+keyAlias=nellai-green-civic
+storeFile=/absolute/path/to/nellai-green-civic-release.jks

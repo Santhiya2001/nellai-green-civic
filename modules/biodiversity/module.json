@@ -1,0 +1,12 @@
+{
+  "id": "biodiversity",
+  "name": "Biodiversity",
+  "version": "1.0.0",
+  "description": "Species catalog and citizen-submitted biodiversity sighting observations for Tirunelveli's flora and fauna.",
+  "api_version": "v1",
+  "author": "Community",
+  "permissions": [],
+  "dependencies": [],
+  "categories": ["WILDLIFE_SIGHTING", "HABITAT_DAMAGE"],
+  "backend_entry": "backend/router.py"
+}

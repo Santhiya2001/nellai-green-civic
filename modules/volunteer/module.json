@@ -1,0 +1,12 @@
+{
+  "id": "volunteer",
+  "name": "Volunteer Nellai",
+  "version": "1.0.0",
+  "description": "Volunteer profiles, activity matching, and scheduling for tree planting, drain cleaning, lake restoration, waste cleanup, awareness campaigns and biodiversity surveys.",
+  "api_version": "v1",
+  "author": "Community",
+  "permissions": [],
+  "dependencies": [],
+  "categories": [],
+  "backend_entry": "backend/router.py"
+}

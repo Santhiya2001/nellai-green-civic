@@ -1,0 +1,12 @@
+{
+  "id": "disaster",
+  "name": "Disaster Management",
+  "version": "1.0.0",
+  "description": "Disaster alerts (flood, cyclone, heavy rain, drought) and citizen disaster reports, linked into the core complaint/escalation engine for urgent response tracking.",
+  "api_version": "v1",
+  "author": "Community",
+  "permissions": [],
+  "dependencies": [],
+  "categories": ["FLOOD_REPORT", "DISASTER_DAMAGE"],
+  "backend_entry": "backend/router.py"
+}

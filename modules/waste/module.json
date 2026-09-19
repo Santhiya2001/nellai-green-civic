@@ -1,0 +1,11 @@
+{
+  "id": "waste",
+  "name": "Waste Management",
+  "version": "1.0.0",
+  "description": "Garbage dumping, illegal dumping and plastic waste reporting, built on the core generic complaint engine.",
+  "api_version": "v1",
+  "author": "Community",
+  "permissions": [],
+  "dependencies": [],
+  "categories": ["GARBAGE_DUMPING", "ILLEGAL_DUMPING", "PLASTIC_WASTE"]
+}
