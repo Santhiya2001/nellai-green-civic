@@ -3,7 +3,7 @@ import uuid
 from datetime import datetime, timezone
 from typing import Optional
 
-from fastapi import APIRouter, Depends, File, Form, HTTPException, Query, UploadFile, status
+from fastapi import APIRouter, BackgroundTasks, Depends, File, Form, HTTPException, Query, UploadFile, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from geoalchemy2.shape import to_shape
@@ -84,6 +84,7 @@ async def _get_complaint_or_404(db: AsyncSession, complaint_id: uuid.UUID) -> Co
 
 @router.post("", response_model=ComplaintOut, status_code=status.HTTP_201_CREATED)
 async def create_complaint(
+    background_tasks: BackgroundTasks,
     category_code: str = Form(...),
     description: str = Form(..., min_length=5, max_length=3000),
     latitude: float = Form(..., ge=-90, le=90),
@@ -150,9 +151,12 @@ async def create_complaint(
     await db.commit()
     await db.refresh(complaint)
 
-    # Runs after commit so a slow/unreachable SMTP server never delays or
-    # risks the complaint-creation transaction itself.
-    await notify_admin_new_complaint(
+    # Runs as a background task, after the response is sent -- a slow or
+    # unreachable SMTP server (real risk: some hosts throttle/timeout
+    # outbound SMTP unpredictably) must never make complaint submission
+    # feel slow to the citizen, regardless of how long the email attempt takes.
+    background_tasks.add_task(
+        notify_admin_new_complaint,
         complaint_number=complaint.complaint_number,
         category_name=category.name,
         description=description,

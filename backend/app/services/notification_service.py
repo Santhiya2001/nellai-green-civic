@@ -54,6 +54,7 @@ async def send_email(to_address: str, subject: str, body: str) -> bool:
             username=settings.SMTP_USER or None,
             password=settings.SMTP_PASSWORD or None,
             start_tls=settings.SMTP_USE_TLS,
+            timeout=10,
         )
         logger.info("Sent email to %s: %s", to_address, subject)
         return True
