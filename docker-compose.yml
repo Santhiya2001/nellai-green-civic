@@ -48,6 +48,14 @@ services:
       - ./modules:/app/modules
       - ./scripts:/app/scripts
       - nellai_uploads:/app/uploads
+      # On networks that TLS-intercept outbound traffic (corporate proxies,
+      # some ISPs) with their own CA, the container's default trust store
+      # won't recognize it even though the host OS does -- this makes
+      # outbound TLS (e.g. SMTP to Gmail) trust whatever the host trusts.
+      # Harmless no-op on a normal network. See docs/installation.md.
+      - /etc/ssl/certs/ca-certificates.crt:/etc/ssl/certs/host-ca-certificates.crt:ro
+    environment:
+      SSL_CERT_FILE: /etc/ssl/certs/host-ca-certificates.crt
     ports:
       - "8000:8000"
     command: >

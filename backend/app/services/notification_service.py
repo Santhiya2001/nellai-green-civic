@@ -55,6 +55,7 @@ async def send_email(to_address: str, subject: str, body: str) -> bool:
             password=settings.SMTP_PASSWORD or None,
             start_tls=settings.SMTP_USE_TLS,
         )
+        logger.info("Sent email to %s: %s", to_address, subject)
         return True
     except (aiosmtplib.SMTPException, OSError) as exc:
         logger.warning("Failed to send email to %s: %s", to_address, exc)
