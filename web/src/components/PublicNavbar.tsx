@@ -26,7 +26,7 @@ export default function PublicNavbar() {
           <a href="/#modules" onClick={() => setMenuOpen(false)}>Modules</a>
           <a href="/#about" onClick={() => setMenuOpen(false)}>About</a>
           <Link to="/citizen/map" onClick={() => setMenuOpen(false)}>Map</Link>
-          <a href="https://github.com" target="_blank" rel="noreferrer">GitHub</a>
+          <a href="https://github.com/Santhiya2001/nellai-green-civic" target="_blank" rel="noreferrer">GitHub</a>
 
           {user ? (
             <>

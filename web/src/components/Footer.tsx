@@ -1,5 +1,8 @@
 import { Link } from "react-router-dom";
+import { API_DOCS_URL } from "../api/client";
 import Logo from "./Logo";
+
+const REPO_URL = "https://github.com/Santhiya2001/nellai-green-civic";
 
 export default function Footer() {
   return (
@@ -27,9 +30,9 @@ export default function Footer() {
 
         <div className="footer-col">
           <h4>Resources</h4>
-          <a href="http://localhost:8000/api/v1/docs" target="_blank" rel="noreferrer">API Documentation</a>
-          <a href="https://github.com" target="_blank" rel="noreferrer">Source Code</a>
-          <a href="https://github.com" target="_blank" rel="noreferrer">Contribute a Module</a>
+          <a href={API_DOCS_URL} target="_blank" rel="noreferrer">API Documentation</a>
+          <a href={REPO_URL} target="_blank" rel="noreferrer">Source Code</a>
+          <a href={`${REPO_URL}/blob/main/docs/module-development.md`} target="_blank" rel="noreferrer">Contribute a Module</a>
         </div>
 
         <div className="footer-col">

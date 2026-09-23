@@ -41,7 +41,13 @@ class Settings(BaseSettings):
     SMTP_USER: str = ""
     SMTP_PASSWORD: str = ""
     SMTP_FROM_EMAIL: str = "noreply@nellaigreencivic.org"
+    SMTP_USE_TLS: bool = True
     FCM_SERVER_KEY: str = ""
+
+    # Every newly filed complaint sends a one-line alert email here, in
+    # addition to the normal in-app notification to the reporter/authority.
+    # Blank disables the alert (e.g. in CI/tests) without touching SMTP config.
+    ADMIN_ALERT_EMAIL: str = ""
 
     REDIS_URL: str = "redis://localhost:6379/0"
     RATE_LIMIT_PER_MINUTE: int = 60

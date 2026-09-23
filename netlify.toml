@@ -7,10 +7,7 @@
   publish = "web/dist"
 
 [build.environment]
-  # Set the real value in Netlify's UI (Site settings -> Environment
-  # variables) once the backend is hosted somewhere -- this placeholder
-  # only prevents the build from referencing an undefined variable.
-  VITE_API_BASE_URL = "http://localhost:8000/api/v1"
+  VITE_API_BASE_URL = "https://nellai-backend.onrender.com/api/v1"
 
 # Client-side routing (React Router): let every path fall through to
 # index.html so refreshing e.g. /citizen/report doesn't 404.

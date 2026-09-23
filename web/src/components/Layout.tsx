@@ -1,4 +1,5 @@
 import { Link, NavLink, Outlet } from "react-router-dom";
+import { API_DOCS_URL } from "../api/client";
 import { useAuth } from "../store/AuthContext";
 import Logo from "./Logo";
 
@@ -77,7 +78,7 @@ export default function Layout() {
           <span>Nellai Green &amp; Civic — open source under Apache License 2.0</span>
           <Link to="/privacy">Privacy</Link>
           <Link to="/terms">Terms</Link>
-          <a href="http://localhost:8000/api/v1/docs" target="_blank" rel="noreferrer">API Docs</a>
+          <a href={API_DOCS_URL} target="_blank" rel="noreferrer">API Docs</a>
         </footer>
       </div>
     </div>

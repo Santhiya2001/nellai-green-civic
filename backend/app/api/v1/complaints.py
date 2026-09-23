@@ -28,7 +28,7 @@ from app.services.authority_assignment import assign_authority
 from app.services.duplicate_detection import find_possible_duplicates
 from app.services.escalation_engine import compute_deadline
 from app.services.gis import make_point, nearby_filter
-from app.services.notification_service import notify_user
+from app.services.notification_service import notify_admin_new_complaint, notify_user
 from app.services.storage import save_upload
 
 router = APIRouter(prefix="/complaints", tags=["Complaints"])
@@ -149,6 +149,19 @@ async def create_complaint(
 
     await db.commit()
     await db.refresh(complaint)
+
+    # Runs after commit so a slow/unreachable SMTP server never delays or
+    # risks the complaint-creation transaction itself.
+    await notify_admin_new_complaint(
+        complaint_number=complaint.complaint_number,
+        category_name=category.name,
+        description=description,
+        severity=complaint.severity,
+        latitude=latitude,
+        longitude=longitude,
+        reporter_email=current_user.email,
+    )
+
     return _complaint_to_out(complaint)
 
 
