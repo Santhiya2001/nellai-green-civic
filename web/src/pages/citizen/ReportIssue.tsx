@@ -2,6 +2,7 @@ import { FormEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { apiClient } from "../../api/client";
 import { Category } from "../../types";
+import { extractErrorMessage } from "../../utils/errors";
 
 export default function ReportIssue() {
   const navigate = useNavigate();
@@ -61,7 +62,7 @@ export default function ReportIssue() {
       });
       navigate(`/citizen/complaints?highlight=${data.id}`);
     } catch (err: any) {
-      setError(err?.response?.data?.detail || "Could not submit complaint.");
+      setError(extractErrorMessage(err, "Could not submit complaint."));
     } finally {
       setBusy(false);
     }

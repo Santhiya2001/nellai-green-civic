@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { apiClient } from "../../api/client";
+import { extractErrorMessage } from "../../utils/errors";
 
 interface VolunteerEvent {
   id: string;
@@ -28,7 +29,7 @@ export default function VolunteerActivities() {
       setMessage("Registered! See you there.");
       refresh();
     } catch (err: any) {
-      setMessage(err?.response?.data?.detail || "Could not register.");
+      setMessage(extractErrorMessage(err, "Could not register."));
     }
   }
 

@@ -2,6 +2,7 @@ import { FormEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { homePathForRoles, useAuth } from "../store/AuthContext";
 import Logo from "../components/Logo";
+import { extractErrorMessage } from "../utils/errors";
 
 export default function Register() {
   const { register } = useAuth();
@@ -21,7 +22,7 @@ export default function Register() {
       const user = await register(fullName, email, phone, password);
       navigate(homePathForRoles(user.roles));
     } catch (err: any) {
-      setError(err?.response?.data?.detail || "Could not create account.");
+      setError(extractErrorMessage(err, "Could not create account."));
     } finally {
       setBusy(false);
     }
